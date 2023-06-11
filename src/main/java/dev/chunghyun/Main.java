@@ -2,6 +2,8 @@ package dev.chunghyun;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        // 익명 내부 클래스
+        RunSomething runSomething = () -> System.out.println("Hello!");
+        runSomething.doIt();
     }
 }
