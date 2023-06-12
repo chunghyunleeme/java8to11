@@ -35,5 +35,34 @@ public class Main {
 
         UnaryOperator<Integer> unaryOperator = number -> number + 10;
         System.out.println(unaryOperator.apply(8));
+
+        Main main = new Main();
+        main.run();
+    }
+
+    private void run() {
+        int baseNumber = 10;
+
+        // 로컬 클래스
+        class LocalClass {
+            void printBaseNumber() {
+                int baseNumber = 19;
+                System.out.println(baseNumber); // 19
+            }
+        }
+        LocalClass localClass = new LocalClass();
+        localClass.printBaseNumber();
+
+        // 익명 클래스
+        IntConsumer intConsumer = new IntConsumer() {
+            @Override
+            public void accept(int baseNumber) {
+                System.out.println(baseNumber); // 20
+            }
+        };
+        intConsumer.accept(20);
+
+        IntConsumer printInt = i -> System.out.println(i + baseNumber);
+        printInt.accept(11);
     }
 }
