@@ -1,5 +1,6 @@
 package dev.chunghyun;
 
+import java.util.Arrays;
 import java.util.function.*;
 
 public class Main {
@@ -38,6 +39,24 @@ public class Main {
 
         Main main = new Main();
         main.run();
+
+        Function<String, Greeting> chunghyunGreeting = Greeting::new;
+        Greeting chunghyun = chunghyunGreeting.apply("chunghyun");
+        System.out.println(chunghyun.getName());
+
+        Supplier<Greeting> newGreeting = Greeting::new;
+        newGreeting.get();
+
+        Greeting greeting = new Greeting();
+        UnaryOperator<String> hello = greeting::hello;
+        hello.apply("chunghyun");
+
+        UnaryOperator<String> hi = Greeting::hi;
+        hi.apply("chunghyun");
+
+        String[] names = {"neo", "chunghyun", "dev"};
+        Arrays.sort(names, String::compareToIgnoreCase);
+        System.out.println(Arrays.toString(names));
     }
 
     private void run() {
