@@ -1,7 +1,8 @@
 package dev.chunghyun;
 
-import java.util.Arrays;
+import java.util.*;
 import java.util.function.*;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
@@ -64,6 +65,41 @@ public class Main {
         foo.printNameUpperCase();
 
         Foo.printAnyThing();
+
+
+        List<String> nameList = new ArrayList<>();
+        nameList.add("chunghyun");
+        nameList.add("neo");
+        nameList.add("sam");
+        nameList.add("marco");
+
+        nameList.forEach(System.out::println);
+
+        // Spliterator는 쪼갤 수 있는 기능을 가지고 있는 Iterator
+        Spliterator<String> spliterator = nameList.spliterator();
+        Spliterator<String> spliterator1 = spliterator.trySplit();
+        while (spliterator.tryAdvance(System.out::println));
+        System.out.println("----------");
+        while (spliterator1.tryAdvance(System.out::println));
+
+
+        long c = nameList.stream().map(String::toUpperCase)
+                .filter(s -> s.startsWith("C"))
+                .count();
+        System.out.println("count of startsWith C: " + c);
+
+        nameList.stream().map(String::toUpperCase)
+                .filter(s -> s.startsWith("C"))
+                .collect(Collectors.toSet());
+
+        System.out.println("==========");
+        nameList.removeIf(s -> s.startsWith("c"));
+        nameList.forEach(System.out::println);
+
+        System.out.println("==========");
+        Comparator<String> compareToIgnoreCase = String::compareToIgnoreCase;
+        nameList.sort(compareToIgnoreCase.reversed());
+        nameList.forEach(System.out::println);
     }
 
     private void run() {
