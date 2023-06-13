@@ -57,6 +57,13 @@ public class Main {
         String[] names = {"neo", "chunghyun", "dev"};
         Arrays.sort(names, String::compareToIgnoreCase);
         System.out.println(Arrays.toString(names));
+
+
+        Foo foo = new DefaultFoo("chunghyun");
+        foo.printName();
+        foo.printNameUpperCase();
+
+        Foo.printAnyThing();
     }
 
     private void run() {
