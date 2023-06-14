@@ -3,6 +3,7 @@ package dev.chunghyun;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
@@ -100,6 +101,26 @@ public class Main {
         Comparator<String> compareToIgnoreCase = String::compareToIgnoreCase;
         nameList.sort(compareToIgnoreCase.reversed());
         nameList.forEach(System.out::println);
+
+
+        System.out.println("==========");
+        List<String> collect = nameList.stream().map(String::toUpperCase)
+                .collect(Collectors.toList());
+        collect.forEach(System.out::println);
+
+        for(String name: nameList) {
+            if(name.startsWith("c")) {
+                System.out.println(name);
+            }
+        }
+
+        // parallelStream을 사용하면 내부적으로 spliterator를 사용하여 병렬적으로 순회
+        // 다중 스레드로 처리 -> 무조건 좋은건 아님(ex. 컨텍스트 스위칭) 데이터가 방대할 경우에는 유리
+        collect = nameList.parallelStream().map(s -> {
+            System.out.println(s + " " + Thread.currentThread().getName());
+            return s.toUpperCase();
+        }).collect(Collectors.toList());
+        collect.forEach(System.out::println);
     }
 
     private void run() {
