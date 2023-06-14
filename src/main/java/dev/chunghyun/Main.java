@@ -1,5 +1,6 @@
 package dev.chunghyun;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -183,6 +184,12 @@ public class Main {
                 })
                 .collect(Collectors.toList());
         spring.forEach(System.out::println);
+
+
+        System.out.println("==========");
+        OnlineClass spring_boot = new OnlineClass(1, "spring boot", true);
+        Optional<Progress> progress = spring_boot.getProgress();
+        progress.ifPresent(p -> System.out.println(p.getStudyDuration()));
     }
 
     private void run() {
