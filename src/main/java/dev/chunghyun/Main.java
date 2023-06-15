@@ -190,6 +190,40 @@ public class Main {
         OnlineClass spring_boot = new OnlineClass(1, "spring boot", true);
         Optional<Progress> progress = spring_boot.getProgress();
         progress.ifPresent(p -> System.out.println(p.getStudyDuration()));
+
+        Optional<OnlineClass> optional = springClasses.stream()
+                .filter(oc -> oc.getTitle().startsWith("spring"))
+                .findFirst();
+
+        System.out.println(optional.isPresent());
+        System.out.println(optional.isEmpty());
+        // get을 바로 사용하면 값이 없을 때, NoSuchElementException 발생
+        if(optional.isPresent()) {
+            System.out.println(optional.get().getTitle());
+        }
+
+        // 아래와 같이 될 수 있으면 get을 사용 안하는게 더 나음
+        optional.ifPresent(oc -> System.out.println(oc.getTitle()));
+
+        OnlineClass onlineClass = optional.orElse(createNewClass());
+        System.out.println(onlineClass.getTitle());
+
+        // 없으면 동적으로 무슨 작업을 해야한다면 orElseGet이 적절해 보임 -> orElse는 있어도 일단 실행은 됨(가져오지만 않을 뿐);
+        OnlineClass onlineClass1 = optional.orElseGet(Main::createNewClass);
+        System.out.println(onlineClass1.getTitle());
+
+
+//        OnlineClass onlineClass2 = optional.orElseThrow(IllegalStateException::new);
+
+        System.out.println(optional.filter(OnlineClass::isClosed).isPresent());
+
+        // Optional 안에 들어있는 인스턴스가 optional일때 flatMap
+        optional.flatMap(OnlineClass::getProgress);
+    }
+
+    private static OnlineClass createNewClass() {
+        System.out.println("creating new online class");
+        return new OnlineClass(10, "New Class", false);
     }
 
     private void run() {
