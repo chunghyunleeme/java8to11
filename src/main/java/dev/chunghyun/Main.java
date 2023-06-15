@@ -1,6 +1,8 @@
 package dev.chunghyun;
 
-import java.time.Duration;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
@@ -219,6 +221,50 @@ public class Main {
 
         // Optional 안에 들어있는 인스턴스가 optional일때 flatMap
         optional.flatMap(OnlineClass::getProgress);
+
+
+        System.out.println("==========");
+        Instant instant = Instant.now();
+        System.out.println(instant); // 기준시 UTC, GMT
+        System.out.println(instant.atZone(ZoneId.of("UTC")));
+
+        ZoneId zone = ZoneId.systemDefault();
+        System.out.println(zone);
+        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.of("Asia/Seoul"));
+        System.out.println(zonedDateTime);
+
+
+        // 인간용
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(now);
+
+        LocalDateTime birthDay = LocalDateTime.of(1995,Month.MARCH, 11, 0,0,0);
+        System.out.println(birthDay);
+
+        ZonedDateTime nowInLa = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
+        System.out.println(nowInLa);
+
+        LocalDate today = LocalDate.now();
+        LocalDate nextYearBirthDay = LocalDate.of(2024,Month.MARCH, 11);
+        Period period = Period.between(today, nextYearBirthDay);
+        System.out.println(period);
+
+        Period until = today.until(nextYearBirthDay);
+        System.out.println(until.get(ChronoUnit.DAYS));
+
+
+        Instant instant1 = Instant.now();
+        Instant plus = instant1.plus(10, ChronoUnit.SECONDS);
+        Duration between = Duration.between(instant1, plus);
+        System.out.println(between.getSeconds());
+
+
+        DateTimeFormatter MMddYYYY = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        System.out.println(now.format(MMddYYYY));
+
+        LocalDate parse = LocalDate.parse("03/11/1995", MMddYYYY);
+        System.out.println(parse);
+
     }
 
     private static OnlineClass createNewClass() {
