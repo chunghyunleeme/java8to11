@@ -265,6 +265,24 @@ public class Main {
         LocalDate parse = LocalDate.parse("03/11/1995", MMddYYYY);
         System.out.println(parse);
 
+
+
+        System.out.println("==========");
+        Thread thread = new Thread(() -> {
+            System.out.println("Thread: " + Thread.currentThread().getName());
+            try {
+                Thread.sleep(3000L);
+            } catch (InterruptedException e) {
+                throw new IllegalStateException(e);
+            }
+        });
+        System.out.println("Hello: " + Thread.currentThread().getName());
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(thread + "is finished");
     }
 
     private static OnlineClass createNewClass() {
