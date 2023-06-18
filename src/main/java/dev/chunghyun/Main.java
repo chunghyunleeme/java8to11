@@ -4,6 +4,10 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -283,6 +287,31 @@ public class Main {
             e.printStackTrace();
         }
         System.out.println(thread + "is finished");
+
+
+        // ExecutorService 작업을 실행하고 나면 다음 작업 들어올때까지 대기 -> 명시적으로 shutdown해야함
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        executorService.submit(getRunnable("Hello"));
+        executorService.submit(getRunnable("Chunghyun"));
+        executorService.submit(getRunnable("The"));
+        executorService.submit(getRunnable("Java"));
+        executorService.submit(getRunnable("Thread"));
+
+        executorService.shutdown();
+
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.schedule(getRunnable("Scheduled!"), 5, TimeUnit.SECONDS);
+
+
+        scheduledExecutorService.scheduleAtFixedRate(getRunnable("scheduleAtFixedRate!"), 1,2, TimeUnit.SECONDS);
+        //scheduledExecutorService.shutdown();
+
+
+    }
+
+    private static Runnable getRunnable(String message) {
+        return () -> System.out.println(message + " " + Thread.currentThread().getName());
     }
 
     private static OnlineClass createNewClass() {
