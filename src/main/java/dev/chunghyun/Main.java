@@ -4,16 +4,13 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
         int baseNumber = 10;
         // 익명 내부 클래스
         RunSomething runSomething = number -> number + baseNumber;
@@ -305,9 +302,46 @@ public class Main {
 
 
         scheduledExecutorService.scheduleAtFixedRate(getRunnable("scheduleAtFixedRate!"), 1,2, TimeUnit.SECONDS);
-        //scheduledExecutorService.shutdown();
+        scheduledExecutorService.shutdown();
 
 
+
+        System.out.println("==========");
+        Callable<String> callable = () -> {
+            Thread.sleep(2000L);
+            return "Callable";
+        };
+
+        ExecutorService executorService1 = Executors.newFixedThreadPool(4);
+        Future<String> callableFuture = executorService1.submit(callable);
+
+        System.out.println(callableFuture.isDone());
+
+        System.out.println("Started!");
+
+//        callableFuture.cancel(true); // true로 주면 현재 진행중인 작업을 interrupt하면서 종료, false는 기다림 -> 기다리더라도 get으로 가져올수 없음(CancellationException)
+
+        callableFuture.get();// 블로킹
+        System.out.println(callableFuture.isDone());
+        System.out.println("End!!");
+
+        Callable<String> callableJava = () -> {
+            Thread.sleep(3000L);
+            return "Java";
+        };
+
+        Callable<String> callableChunghyun = () -> {
+            Thread.sleep(1000L);
+            return "Chunghyun";
+        };
+
+        List<Future<String>> futures = executorService1.invokeAll(Arrays.asList(callable, callableJava, callableChunghyun));
+        for (Future<String> f : futures) {
+            System.out.println(f.get());
+        }
+
+        String s = executorService1.invokeAny(Arrays.asList(callable, callableJava, callableChunghyun));
+        System.out.println(s);
     }
 
     private static Runnable getRunnable(String message) {
