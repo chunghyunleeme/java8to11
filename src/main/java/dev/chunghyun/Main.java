@@ -342,6 +342,28 @@ public class Main {
 
         String s = executorService1.invokeAny(Arrays.asList(callable, callableJava, callableChunghyun));
         System.out.println(s);
+
+
+        System.out.println("==========");
+        CompletableFuture<String> future = CompletableFuture.completedFuture("chunghyun!!!");
+        System.out.println(future.get());
+
+        CompletableFuture<Void> voidCompletableFuture = CompletableFuture.runAsync(() -> {
+            System.out.println("Hello " + Thread.currentThread().getName());
+        });
+        voidCompletableFuture.get();
+
+        CompletableFuture<String> stringCompletableFuture = CompletableFuture.supplyAsync(() -> {
+            System.out.println("Hello~ " + Thread.currentThread().getName());
+            return "Hello";
+        }).thenApply((s2) -> {
+            System.out.println(Thread.currentThread().getName());
+            return s2.toUpperCase();
+        });
+
+        stringCompletableFuture.get();
+
+
     }
 
     private static Runnable getRunnable(String message) {
@@ -369,7 +391,7 @@ public class Main {
         // 익명 클래스
         IntConsumer intConsumer = new IntConsumer() {
             @Override
-            public void accept(int baseNumber) {
+            public void accept(int baseNumber2) {
                 System.out.println(baseNumber); // 20
             }
         };
